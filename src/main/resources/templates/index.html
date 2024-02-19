@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+       <link rel="stylesheet" href="style.css">
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+         crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+         integrity="sha384-q5qzjMEWBfW6XKw8OI4RtFJx4BGF2A8zq0l7f8xIaf8QbBR8NShgDhpdL4xMs7yN"
+         crossorigin="anonymous"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+         integrity="sha384-Jj17wnf/nfSLzquL1tdFof8XCvuTRgTpFjapTcxfejzmM2UDTnA2P9cfsQcz/dl"
+         crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+ <!-- Include Bootstrap Table CSS and JS -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/bootstrap-table.min.css">
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.2/bootstrap-table.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    
+    <title>list</title>
+
+    <style>
+
+      th{
+        color: white;
+      }
+      input[type=date]{
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg py-3 sticky-top navbar-light bg-light bg-white">
+        <div class="container">
+          <a class="navbar-brand" href="#">
+            <!-- <img src="img/ahamed_s-logo2.jpg" alt=""> -->
+            Ahamed's Apple
+        </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+      <!--       <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#home">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#services">Menus</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Upload</a>
+              </li>
+             
+            </ul> -->
+<!--             <button class="btn btn-primary ms-lg-3">Log out</button> -->
+          </div>
+        </div>
+      </nav>
+
+
+      <div class="container mt-5">
+
+        <div class="col-4" style="height: 40px; ;background-color: green;margin: 2px;color: white; padding: 4px;">
+          <form th:action="@{/getbydate}" method="GET" id="dateForm">
+            <label>Date  :</label>
+            <input type="date" name="date" id="selectedDate"  th:value="${date}" onchange="submitForm()">
+           </form>
+          
+         
+          
+        </div>
+        
+            <div class="btn-group">
+  <!--           <button type="button" class="btn btn-primary" onclick="getCurrentTableData()">export</button> -->
+            <button type="button" class="btn btn-primary" onclick="showFirstTable()">Patient Booking</button>
+            <button type="button" class="btn btn-secondary" onclick="showSecondTable()">Queried Patient</button>
+            <button type="button" class="btn btn-primary" onclick="showThirdTable()">Rejected Patients</button>
+        </div>
+    
+        <!-- Tables -->
+        <table id="firstTable" class="table table-bordered" data-toggle="table" data-pagination="true" data-page-size="10">
+            <thead style="background-color: green;">
+                <tr>
+                    <!-- <th>Name</th> -->
+                    <th>Phone Number</th>
+                    <th>Patients Choice</th>
+                    <th>Timestamp</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="cp : ${currentpatients}">
+                   <!--  <td th:text="${cp.name}"></td> -->
+                     <td th:text="${cp.phone_number}"></td>
+                     <td th:text="${cp.Doctor_choice}"></td>
+                    <td th:text="${cp.timestamp}"></td>
+      
+                    </tr>
+                </tbody>
+        </table>
+    
+        <table id="secondTable" class="table table-bordered" style="display:none" data-toggle="table" data-pagination="true" data-page-size="10">
+          <thead style="background-color: green; color: white;">
+            <tr>
+               <!--  <th>Name</th> -->
+                <th>Phone Number</th>
+                <th>Timestamp</th>
+                
+            </tr>
+            </thead>
+            <tbody>
+  
+                
+          <tr th:each="qp : ${queriedpatients}">
+             <!--   <td th:text="${qp.name}"></td> -->
+                     <td th:text="${qp.phone_number}"></td>
+                    <td th:text=${qp.timestamp}></td>
+          
+            </tr>
+            </tbody>
+            
+        </table>
+        <table id="thirdTable" class="table table-bordered" style="display:none" data-toggle="table" data-pagination="true" data-page-size="10">
+          <thead style="background-color: green; color: white;">
+            <tr>
+<!--                 <th>Name</th> -->
+                <th>Phone Number</th>
+                <th>Timestamp</th>
+            </tr>
+            </thead>
+            <tbody>
+             <tr th:each="np : ${noappointment}">
+              <!--  <td th:text="${np.name}"></td> -->
+                     <td th:text="${np.phone_number}"></td>
+                     <td th:text="${np.timestamp}"></td>
+             </tr>
+             
+            </tbody>
+            
+        </table>
+    </div>
+    
+<script>
+
+
+
+
+
+
+
+    function showFirstTable() {
+        $('#firstTable').show();
+        $('#secondTable').hide();
+        $('#thirdTable').hide();
+
+        if (!$('#firstTable').data('bootstrap.table')) {
+            $('#firstTable').bootstrapTable();
+        }
+ 
+        $('#secondTable').bootstrapTable('destroy');
+        $('#thirdTable').bootstrapTable('destroy');
+    }
+
+    function showSecondTable() {
+        $('#firstTable').hide();
+        $('#thirdTable').hide();
+        $('#secondTable').show();
+
+        if (!$('#secondTable').data('bootstrap.table')) {
+            $('#secondTable').bootstrapTable();
+        }
+        $('#firstTable').bootstrapTable('destroy');
+        $('#thirdTable').bootstrapTable('destroy');
+    }
+
+    function showThirdTable() {
+        $('#firstTable').hide();
+        $('#thirdTable').show();
+        $('#secondTable').hide();
+
+        if (!$('#thirdTable').data('bootstrap.table')) {
+            $('#thirdTable').bootstrapTable();
+        }
+
+        $('#firstTable').bootstrapTable('destroy');
+        $('#secondTable').bootstrapTable('destroy');
+    }
+
+
+    $(document).ready(function () {
+        showFirstTable();
+    });
+    function submitForm() {
+    	 document.getElementById("dateForm").submit();              
+    }
+   /*  document.getElementById('selectedDate').addEventListener('change', function () {
+        var selectedDate = $('#selectedDate').val();
+        var formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+        $.ajax({
+            url: '/getbydate?date='+selectedDate,
+            type: 'GET',
+            data: { date: selectedDate},
+            success: function (data) {
+                console.log('Received data:', data);
+
+        });
+    }); */
+    
+ // Function to get the data of the currently visible table
+    function getCurrentTableData() {
+    	var currentTable1;
+    	var currentTable2;
+    	var currentTable3;
+        currentTable1 = $('#firstTable');
+      
+            currentTable2 = $('#secondTable');
+      
+            currentTable3 = $('#thirdTable');
+    
+            console.error('No table is visible.');
+           var alldata=[];
+        var patientbooking = [];
+        var queriedpatient=[];
+        var rejectedpatient=[];
+        currentTable1.find('tbody tr').each(function () {
+            var row1 = {};
+            $(this).find('td').each(function (index) {
+                // Assuming each column has a corresponding header in the thead
+                var headerText = currentTable1.find('thead th').eq(index).text();
+                row1[headerText] = $(this).text();
+            });
+            patientbooking.push(row1);
+        });
+      
+        currentTable2.find('tbody tr').each(function () {
+            var row2 = {};
+            $(this).find('td').each(function (index) {
+                // Assuming each column has a corresponding header in the thead
+                var headerText = currentTable2.find('thead th').eq(index).text();
+                row2[headerText] = $(this).text();
+            });
+            queriedpatient.push(row2);
+        });
+
+        currentTable2.find('tbody tr').each(function () {
+            var row3 = {};
+            $(this).find('td').each(function (index) {
+                // Assuming each column has a corresponding header in the thead
+                var headerText = currentTable3.find('thead th').eq(index).text();
+                row3[headerText] = $(this).text();
+            });
+            rejectedpatient.push(row3);
+        });
+        console.log('Current Table Data:', patientbooking);
+        console.log('Current Table Data2:', queriedpatient);
+        console.log('Current Table Data3:', rejectedpatient);
+        
+      var requestdata={ 
+    		  patientbooking:patientbooking,
+    		  queriedpatient:queriedpatient,
+    		  rejectedpatient:rejectedpatient
+      };
+      var jsondata = JSON.stringify(requestdata);
+      console.log("heres the json"+jsondata);
+      $.ajax({
+    	  url: '/generate',
+          type: 'POST',
+          contentType: 'application/json',
+          data: jsondata,
+          responseType: 'blob',
+          success: function(data) {
+              // Create a Blob from the response
+              var blob = new Blob([data], { type: 'application/pdf' });
+
+              // Create a temporary link element to trigger the download
+              var url = window.URL.createObjectURL(blob);
+              var a = document.createElement('a');
+              a.href = url;
+              a.download = 'report.pdf';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(url);
+          },
+          error: function(error) {
+              console.error('Error:', error);
+          }
+      });
+    }
+      
+
+    // Example usage: call this function when you need to get the current table data
+   
+
+    
+    
+    
+</script>
+
+  
+<!-- herooo -->
+<!-- 
+<div class="hero vh-100 d-flex align-items-center" id="home">
+    <div class="row">
+
+        <div class="col-lg-7 mx-auto">
+            <h1 class="display-4 text-white">
+                Holistic Healing Center 
+            </h1>
+            
+        </div>
+    </div>
+</div>
+<section id="services">
+  <div class="container">
+    <div class="row mb-5">
+    <div class="col-md-8 mx-auto text-center">
+      <h6 class="text-primary">
+        The Menus
+      </h6>
+      <h1>Menus</h1>
+    </div>
+  </div>
+  <div class="row g-4">
+  <div class="col-lg-4 col-sm-6">
+    <div class="service card-effect">
+    <div class="iconbox ">
+      <i class='bx bxs-bar-chart-alt-2'></i>
+    </div>
+    <h5 class="mt-4 mb-2">
+      Profit analysis
+    </h5>
+    <p>Click here to check out the profit.<br>
+      loss analysis chart for your clinic .<br>
+      lorem epsilum etc etc.</p>
+  </div>
+</div>
+<div class="col-lg-4 col-sm-6">
+  <div class="service card-effect">
+  <div class="iconbox ">
+    <i class='bx bxs-dashboard'></i>
+  </div>
+  <h5 class="mt-4 mb-2">
+    Doctor Dashboard
+  </h5>
+  <p>Click here to check out doctors.<br>
+    and their patients.<br>
+    lorem epsilum etc etc.</p>
+</div>
+</div>
+<div class="col-lg-4 col-sm-6">
+  <div class="service card-effect">
+  <div class="iconbox ">
+    <i class='bx bx-plus-medical'></i>
+  </div>
+  <h5 class="mt-4 mb-2">
+    Patient tracking
+  </h5>
+  <p>Click here to check youur
+    patient's health and rating .<br>
+    lorem epsilum etc etc.</p>
+</div>
+</div>
+
+  </div>
+</div> -->
+<!-- </section> -->
+<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible"
+		content="IE=edge">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0">
+	<title>
+		PLEASE PROVIDE YOUR DETAILS
+	</title>
+
+	<style>
+
+	
+		body {
+			background-color: #05c46b;
+			font-family: Verdana;
+			text-align: center;
+		}
+
+	
+		form {
+			background-color: #fff;
+			max-width: 500px;
+			margin: 20px auto;
+			padding: 30px 20px;
+			box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+		}
+
+	
+		.form-control {
+			text-align: left;
+			margin-bottom: 25px;
+		}
+
+		
+		.form-control label {
+			display: block;
+			margin-bottom: 10px;
+		}
+
+	
+		.form-control input,
+		.form-control select,
+		.form-control textarea {
+			border: 1px solid #777;
+			border-radius: 2px;
+			font-family: inherit;
+			padding: 10px;
+			display: block;
+			width: 95%;
+		}
+	
+		button {
+			background-color: #05c46b;
+			border: 1px solid #777;
+			border-radius: 2px;
+			font-family: inherit;
+			font-size: 21px;
+			display: block;
+			width: 100%;
+			margin-top: 50px;
+			margin-bottom: 20px;
+		}
+		#concern{
+		width: 99%;
+		}
+		.upper-bar{
+		    max-width:500px;
+            background-color: #fff;
+			max-width: 500px;
+			margin: 2px auto;
+			padding: 30px 20px;
+			box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+           
+}
+	</style>
+</head>
+
+<body>
+	<h1>Please fill the form to proceed further</h1>
+
+	<!-- Create Form -->
+	<form id="form" th:action="@{/public2/getpatientdetails}"  th:object="${details}" method="POST">
+
+		<div class="form-control">
+			<label for="name" id="label-name">
+				Name
+			</label>
+
+			
+			<input type="text"
+				id="name"
+				placeholder="Enter your name"  th:field="*{name}"  required/>
+		</div>
+
+		<div class="form-control">
+			<label for="phone number" id="label-email">
+				phone number
+			</label>
+
+		
+			<input type="text"
+				id="email" th:field="*{phone_number}"
+				placeholder="Enter your phone number" required/>
+		</div>
+
+		<div class="form-control">
+			<label for="age" id="label-age">
+				Location
+			</label>
+
+			
+			<input type="text"
+				id="age" th:field="*{from}"
+				placeholder="where are you from?" required/>
+		</div>
+
+       	<div class="form-control">
+			<label for="age" id="label-age">
+			  Concern
+			</label>
+
+		<select id="concern" name="concern" th:field="*{concern}">
+		<option th:each="option:${options}" th:text="${option}" th:value="${option}"></option>
+	
+  
+</select>
+		<!-- 	<input type="text"
+				id="age" th:field="*{concern}"
+				placeholder="whats your concern?" required/> -->
+		</div>
+
+		<div class="form-control">
+			<label for="comment">
+				Any comments
+			</label>
+			<textarea name="comment" id="comment"
+			>
+			</textarea>
+		</div>
+		<button type="submit" value="submit">
+			Submit
+		</button>
+	</form>
+
+	<div class="upper-bar">
+	 contact :+91 9677589966
+	 <hr>
+	 Address:
+	  Dr Ahameds Apple
+     B-7 Doctors plaza,
+     1st floor, Paramount Park,
+     Vijayanagar, Velachery main road,
+     Chennai-600042.
+	</div>
+
+</body>
+</html>
